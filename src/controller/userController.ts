@@ -35,4 +35,56 @@ const getUser=async(req:Request,res:Response,next:NextFunction)=>{
     }
     
 }
-export {createUser,getUser};
+const getAllUser=async(req:Request,res:Response,next:NextFunction)=>{
+    const userId=Number(req.params.id);
+    try{
+        const user_all=await prisma.user.findMany({
+            where:{
+            id: userId
+            }
+        })
+        res.status(200).json({
+            message:"User Found",
+            user:user_all
+        })
+    }catch(error){
+        next(Apierror.badRequest("User Not Found"))
+    }
+    
+}
+const deleteUser=async(req:Request,res:Response,next:NextFunction)=>{
+    const userId=Number(req.params.id);
+    try{
+        const user_all=await prisma.user.delete({
+            where:{
+            id: userId
+            }
+        })
+        res.status(200).json({
+            message:"User succesfully deleted",
+            user:userId
+        })
+    }catch(error){
+        next(Apierror.badRequest("User Not Found"))
+    }
+    
+}
+const updateUser=async(req:Request,res:Response,next:NextFunction)=>{
+    const userId=Number(req.params.id);
+    try{
+        const user_update=await prisma.user.delete({
+            where:{
+            id: userId
+            }
+        })
+        res.status(200).json({
+            message:"User succesfully updated",
+            user:userId
+        })
+    }catch(error){
+        next(Apierror.badRequest("User Not Found"))
+    }
+    
+}
+
+export {createUser,getUser,getAllUser,deleteUser,updateUser};

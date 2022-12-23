@@ -41,6 +41,7 @@ model Batch {
 model Payment {
   id             Int      @id @default(autoincrement())
   // payment        User?
+  payment_amount   Int
   payment_date   DateTime
   payment_method String
   users           User[]
