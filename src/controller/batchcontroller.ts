@@ -3,83 +3,76 @@ import { Response,Request } from "express";
 import { nextTick } from "process";
 import Apierror from "../error/APIerror";
 import { prisma } from "../app";
-const create_batch_1=async (req:Request,res:Response,next:NextFunction)=>{
-    const total_number=req.body;
+const createBatch=async (req:Request,res:Response,next:NextFunction)=>{
+    const batchData=req.body;
     try{
-await prisma.batch.create({
-    data:total_number,
+await prisma.user.create({
+    data:batchData,
 });
     res.status(201).json({
-        message:"batch1 created succesfully",
-        user: total_number
-    }) 
-}
+        message:"batch created succesfully",
+        user: batchData
+    })  
+    }
 catch(error){
-    next(Apierror.internal_server_error())
-    }
+next(Apierror.internal_server_error())
+}
 };
-    const create_batch_2=async (req:Request,res:Response,next:NextFunction)=>{
-        const total_number=req.body;
-        try{
-    await prisma.user.create({
-        data:total_number,
-    });
-        res.status(201).json({
-            message:"batch2 created succesfully",
-            user: total_number
-        }) ;
+const getbatch=async(req:Request,res:Response,next:NextFunction)=>{
+    const batchId=Number(req.params.id);
+    try{
+        const batch=await prisma.batch.findUnique({
+            where:{
+            id: batchId
+            }
+        })
+        res.status(200).json({
+            message:"Batch found",
+        batch:batch
+        })
+    }catch(error){
+        next(Apierror.badRequest("Something went wrong"))
     }
-        catch(error){
-            next(Apierror.internal_server_error())
+    
+}
+const deletebatch=async(req:Request,res:Response,next:NextFunction)=>{
+    const batchid=Number(req.params.id);
+    try{
+        const batch=await prisma.batch.delete({
+            where:{
+            id: batchid
             }
-        };
-        const create_batch_3=async (req:Request,res:Response,next:NextFunction)=>{
-            const total_number=req.body;
-            try{
-        await prisma.user.create({
-            data:total_number,
-        });
-            res.status(201).json({
-                message:"batch3 created succesfully",
-                user: total_number
-            }) ;
+        })
+        res.status(200).json({
+            message:"batch succesfully deleted",
+            batch:batch
+        })
+    }catch(error){
+        next(Apierror.badRequest("something went wrong"))
+    }
+    
+}
+const updateBatch = async (req: Request, res: Response, next: NextFunction) => {
+    const batchId = Number(req.params.id)
+    const batchData = req.body
+    try{
+        if(batchData.batch_capacity_current > batchData.batch_capacity_max)
+        {
+            throw "Maximum capacity reached"
         }
-            catch(error){
-                next(Apierror.internal_server_error())
-                }
-            };
-            const create_batch_4=async (req:Request,res:Response,next:NextFunction)=>{
-                const total_number=req.body;
-                try{
-            await prisma.user.create({
-                data:total_number,
-            });
-                res.status(201).json({
-                    message:"batch4 created succesfully",
-                    user: total_number
-                }) ;
-            }
-                catch(error){
-                    next(Apierror.internal_server_error())
-                    }
-                };
+        const batch = await prisma.batch.update({
+            where: {
+                id: batchId,
+            },
+            data: batchData
+        })
+        res.status(200).json({
+            message: "batch updated succesfully",
+            batch: batch,
+        })
+    }catch(error){
+        next(Apierror.badRequest("Something went wrong"))
+    }
+}
 
-                const getBatch=async(req:Request,res:Response,next:NextFunction)=>{
-                    const batch_number=Number(req.params.id);
-                    try{
-                        const user=await prisma.user.findUnique({
-                            where:{
-                            id: batch_number
-                            }
-                        })
-                        res.status(200).json({
-                            message:"Batch found",
-                            user:user
-                        })
-                    }catch(error){
-                        next(Apierror.badRequest("Batch Not Found"))
-                    }
-                    
-                }
-                export {create_batch_1,create_batch_2,create_batch_3,create_batch_4,getBatch};
-        
+export {createBatch,getbatch,deletebatch,updateBatch};

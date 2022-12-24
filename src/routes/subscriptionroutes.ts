@@ -6,3 +6,4 @@ const router: Router = Router();
 
 // get payment
 router.get('/:id',subscriptionformvalidation,payment_controller.get_payment);
+export default router

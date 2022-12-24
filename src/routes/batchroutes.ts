@@ -1,21 +1,18 @@
 import { Router } from "express";
-import * as batchcontroller from '../controller/batchcontroller';
+import * as batchController from '../controller/batchController';
 
 const router: Router = Router();
 
 // create batch
-router.post('/', batchcontroller.createbatch);
+router.post('/', batchController.createBatch);
 
-// get all batch
-router.get('/', batchcontroller.getAllUser);
-
-// get user
-router.get('/:id', batchcontroller.getbatch);
+// get batch
+router.get('/:id', batchController.getbatch);
 
 // patch user
-router.patch('/:id', batchcontroller.updateUser);
+router.patch('/:id', batchController.updateBatch);
 
 // delete user
-router.delete('/:id', batchcontroller.deleteUser);
+router.delete('/:id', batchController.deletebatch);
 
 export default router;
