@@ -17,5 +17,11 @@ class Apierror {
     static internal_server_error(message = "something went wrong") {
         return new Apierror(message, 500);
     }
+    static requestTimeout(message = "Request Timeout") {
+        return new Apierror(message, 408);
+    }
+    static networkAuthenticationerror(message = "Network Error") {
+        return new Apierror(message, 511);
+    }
 }
 exports.default = Apierror;

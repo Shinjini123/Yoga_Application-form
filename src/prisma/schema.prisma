@@ -32,9 +32,9 @@ model User {
 model Batch {
   id Int @id @default(autoincrement())
    // batch User?
-
-   batch_capacity_max     Int
+batch_capacity_max    Int
    batch_capacity_current Int
+   price           Int
  //  users                   User[]
  }
 

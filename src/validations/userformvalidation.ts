@@ -4,7 +4,6 @@ import ApiError from "../error/APIerror";
 
 const UserFormValidation = (req: Request, res: Response, next:NextFunction) => {
     const userData: User = req.body;
-    
     const { age } = userData;
 
     // age limit

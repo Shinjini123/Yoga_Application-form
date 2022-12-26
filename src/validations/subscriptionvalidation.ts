@@ -12,7 +12,6 @@ const SubscriptionFormValidation = (req: Request, res: Response, next:NextFuncti
         next(ApiError.badRequest('Payment amount not matching to 500'));
         return;
     }
-    next();
 }
 
 export default SubscriptionFormValidation;
