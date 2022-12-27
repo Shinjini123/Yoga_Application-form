@@ -50,4 +50,4 @@ const MakePayment = async (
     res.json({message: 'It runs successfully'});
 };
 
-export default MakePayment;
+export default MakePayment;      

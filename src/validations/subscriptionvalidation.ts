@@ -7,8 +7,7 @@ const SubscriptionFormValidation = (req: Request, res: Response, next:NextFuncti
     
     const { payment_amount } = payment;
 
-    // payment amount restriction
-    if (payment_amount < 500 || payment_amount > 500) {
+    if (payment_amount != 500) {
         next(ApiError.badRequest('Payment amount not matching to 500'));
         return;
     }

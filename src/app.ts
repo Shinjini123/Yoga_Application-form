@@ -22,6 +22,7 @@ app.use('/user', router);
 app.get('/', (req: Request, res: Response) => {
     res.send('Yoga Form API');
 });
+//batch router
 app.use('/batch',router);
 // subscription route
 app.use('/subscription', router)
