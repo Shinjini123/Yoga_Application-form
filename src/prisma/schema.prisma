@@ -19,20 +19,20 @@ batch_capacity_max    Int
   users             User[]
  }
 model Payment {
-   id             Int      @id @default(autoincrement())
+   id             String      @id @default(uuid())
    payment_amount   Int
    createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  userId    Int   @unique
-   users     User?     @relation(fields: [userId], references: [id])
+  userId   String  @unique
+   users     User    @relation(fields: [userId], references: [id])
   
  }
 
 model User {
-  id         Int    @id @default(autoincrement())
+  id        String   @id @default(uuid())
   first_name String
   last_name  String
-  phone_no   BigInt @unique
+  phone_no   String? 
   email      String @unique
   age        Int
   gender     Gender
@@ -43,15 +43,9 @@ model User {
   batchId String?   
 
   payment    Payment?
-    createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
-
-  @@index([email, phone_no])
+  payment_status Boolean  @default(false)
+ @@index([email], name: "email")
 }
-
-
-
- 
 enum Gender {
   MALE
   FEMALE

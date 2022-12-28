@@ -10,7 +10,7 @@ const compression_1 = __importDefault(require("compression"));
 const helmet_1 = __importDefault(require("helmet"));
 const cors_1 = __importDefault(require("cors"));
 const userroutes_1 = __importDefault(require("./routes/userroutes"));
-const errorHandler_1 = __importDefault(require("error/errorHandler"));
+const errorHandler_1 = __importDefault(require("./error/errorHandler"));
 const app = (0, express_1.default)();
 const PORT = 3004;
 exports.prisma = new client_1.PrismaClient();
@@ -25,6 +25,7 @@ app.use('/user', userroutes_1.default);
 app.get('/', (req, res) => {
     res.send('Yoga Form API');
 });
+//batch router
 app.use('/batch', userroutes_1.default);
 // subscription route
 app.use('/subscription', userroutes_1.default);

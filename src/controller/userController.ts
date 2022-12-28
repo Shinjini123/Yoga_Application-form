@@ -1,90 +1,117 @@
-import { NextFunction } from "express"
-import { Response,Request } from "express";
-import { nextTick } from "process";
-import Apierror from "../error/APIerror";
-import { prisma } from "../app";
-const createUser=async (req:Request,res:Response,next:NextFunction)=>{
-    const userData=req.body;
-    try{
-await prisma.user.create({
-    data:userData,
-});
-    res.status(201).json({
-        message:"user created succesfully",
-        user: userData
-    })  
-    }
-catch(error){
-next(Apierror.internal_server_error())
-}
-};
-const getUser=async(req:Request,res:Response,next:NextFunction)=>{
-    const userId=Number(req.params.id);
-    try{
-        const user=await prisma.user.findUnique({
-            where:{
-            id: userId
-            }
-        })
-        res.status(200).json({
-            message:"User Found",
-            user:user
-        })
-    }catch(error){
-        next(Apierror.badRequest("User Not Found"))
-    }
-    
-}
-const getAllUser=async(req:Request,res:Response,next:NextFunction)=>{
-    const userId=Number(req.params.id);
-    try{
-        const user_all=await prisma.user.findMany({
-            where:{
-            id: userId
-            }
-        })
-        res.status(200).json({
-            message:"User Found",
-            user:user_all
-        })
-    }catch(error){
-        next(Apierror.badRequest("User Not Found"))
-    }
-    
-}
-const deleteUser=async(req:Request,res:Response,next:NextFunction)=>{
-    const userId=Number(req.params.id);
-    try{
-        const user_all=await prisma.user.delete({
-            where:{
-            id: userId
-            }
-        })
-        res.status(200).json({
-            message:"User succesfully deleted",
-            user:userId
-        })
-    }catch(error){
-        next(Apierror.badRequest("User Not Found"))
-    }
-    
-}
-const updateUser=async(req:Request,res:Response,next:NextFunction)=>{
-    const userId=Number(req.params.id);
-    try{
-        const user_update=await prisma.user.delete({
-            where:{
-            id: userId
-            }
-        })
-        res.status(200).json({
-            message:"User succesfully updated",
-            user:userId
-        })
-    }catch(error){
-        next(Apierror.badRequest("User Not Found"))
-    }
-    
-}
+import { Request, Response, NextFunction } from 'express';
+import { prisma } from '../app';
+import { User } from '@prisma/client';
+import ApiError from '../error/APIerror';
 
-export {createUser,getUser,getAllUser,deleteUser,updateUser};
+export const createUser = async (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+) => {
+    const userData: User = req.body;
+    await prisma.user
+        .create({
+            data: userData,
+        })
+        .then((userResponse: User) => {
+            res.status(201).json({
+                message: 'User Created Successfully',
+                user: userResponse,
+            });
+        })
+        .catch((err) => {
+            console.log('Error', err);
+            next(ApiError.internal_server_error('Some error occured'));
+        });
+};
+
+export const getUser = async (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+) => {
+    const id = String(req.params.id);
+    const user = await prisma.user.findUnique({
+        where: {
+           id ,
+        },
+    });
+    if (!user) {
+        next(ApiError.badRequest(`No user found with id : ${id}`));
+        return;
+    }
+    res.json(user);
+};
+
+export const getAllUser = async (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+) => {
+    await prisma.user
+        .findMany({
+            include: {
+                batch: true,
+            },
+        })
+        .then((users) => {
+            res.json(users);
+        })
+        .catch((err) => {
+            console.log('Error', err);
+            next(ApiError.internal_server_error('Some error occured'));
+        });
+};
+
+export const updateUser = async (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+) => {
+    const id = String(req.params.id);
+    const updatedUserData = req.body;
+    const user = await prisma.user
+        .update({
+            where: {
+                id,
+            },
+            data: updatedUserData,
+            include: {
+                batch: true,
+            },
+        })
+        .then((user) => {
+            res.json({
+                message: 'User updated successfully',
+                user: user,
+            });
+        })
+        .catch((err) => {
+            console.log('Error', err);
+            next(ApiError.internal_server_error('Some error occured'));
+        });
+};
+
+export const deleteUser = async (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+) => {
+    const id = String(req.params.id);
+    await prisma.user
+        .delete({
+            where: {
+                id,
+            },
+        })
+        .then((user) => {
+            res.json({
+                message: 'User deleted successfully',
+                user: user,
+            });
+        })
+        .catch((err) => {
+            console.log('Error', err);
+            next(ApiError.internal_server_error('Some error occured'));
+        });
+};

@@ -1,9 +1,22 @@
 import { Router } from "express";
-import * as payment_controller from '../controller/payment_controller';
-import subscriptionformvalidation from "../validations/subscriptionvalidation";
+import * as SubscriptionController from '../controller/payment_controller';
+import SubscriptionValidation from "../validations/subscriptionvalidation";
 
 const router: Router = Router();
 
-// get payment
-router.get('/:id',subscriptionformvalidation,payment_controller.get_payment);
-export default router
+// create subscription
+router.post('/',  SubscriptionController.createSubscription);
+
+// get all subscription
+router.get('/', SubscriptionController.getAllSubscription);
+
+// get subscription
+router.get('/:id', SubscriptionController.getSubscription);
+
+// patch subscription
+router.patch('/:id', SubscriptionController.updateSubscription);
+
+// delete subscription
+router.delete('/:id', SubscriptionController.deleteSubscription);
+
+export default router;

@@ -3,25 +3,27 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateUser = exports.deleteUser = exports.getAllUser = exports.getUser = exports.createUser = void 0;
+exports.updateUser = exports.deleteUser = exports.getAllUser = exports.getUser = exports.create_User = void 0;
 const APIerror_1 = __importDefault(require("../error/APIerror"));
 const app_1 = require("../app");
-const createUser = async (req, res, next) => {
+const create_User = async (req, res, next) => {
     const userData = req.body;
-    try {
-        await app_1.prisma.user.create({
-            data: userData,
-        });
+    await app_1.prisma.user
+        .create({
+        data: userData,
+    })
+        .then((userResponse) => {
         res.status(201).json({
-            message: "user created succesfully",
-            user: userData
+            message: 'User Created Successfully',
+            user: userResponse,
         });
-    }
-    catch (error) {
-        next(APIerror_1.default.internal_server_error());
-    }
+    })
+        .catch((err) => {
+        console.log('Error', err);
+        next(APIerror_1.default.internal_server_error('Some error occured'));
+    });
 };
-exports.createUser = createUser;
+exports.create_User = create_User;
 const getUser = async (req, res, next) => {
     const userId = Number(req.params.id);
     try {

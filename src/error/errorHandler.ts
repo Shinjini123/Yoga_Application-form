@@ -1,13 +1,14 @@
-import Apierror from "./APIerror";
-import { Response,Request } from "express";
-function errorHandler(err:any, req:any ,res:any,next:any){
-    if(err instanceof Apierror){
-        res.status(err.status_code).message({
-            message:err.message  });
-            return;
-    }
-    res.status(500).json({
-        message:"something went wrong to the server",
-    });
+import ApiError from "./APIerror";
+import { Response, } from "express";
+
+function errorHandler(err: any, req: any, res: Response, next: any) {
+  
+  if (err instanceof ApiError) {
+    res.status(err.status_code).json({error:{message: err.message}});
+    return;
+  }
+
+  res.status(500).json({message: "Something Went Wrong"});
 }
+
 export default errorHandler;

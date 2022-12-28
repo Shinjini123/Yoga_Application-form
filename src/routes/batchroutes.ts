@@ -7,12 +7,12 @@ const router: Router = Router();
 router.post('/', batchController.createBatch);
 
 // get batch
-router.get('/:id', batchController.getbatch);
+router.get('/:id', batchController.getBatch);
 
 // patch user
 router.patch('/:id', batchController.updateBatch);
 
 // delete user
-router.delete('/:id', batchController.deletebatch);
+router.delete('/:id', batchController.deleteBatch);
 
 export default router;
